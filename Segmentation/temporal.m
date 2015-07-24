@@ -21,7 +21,7 @@
     
     imshow(mascara);
     hold on
-    ccbox = regionprops(mascara,'BoundingBox');
-    thisBB = ccbox.BoundingBox;
-    rectangle('Position', [thisBB(1),thisBB(2),thisBB(3),thisBB(4)],'EdgeColor','r','LineWidth',2 );
+    maskbox = regionprops(mascara,'BoundingBox');
+    maskBB = ccbox.BoundingBox;
+    rectangle('Position', [maskBB(1),maskBB(2),maskBB(3),maskBB(4)],'EdgeColor','r','LineWidth',2 );
     
