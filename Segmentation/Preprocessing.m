@@ -22,7 +22,7 @@ function varargout = Preprocessing(varargin)
 
 % Edit the above text to modify the response to help Preprocessing
 
-% Last Modified by GUIDE v2.5 19-May-2015 16:00:09
+% Last Modified by GUIDE v2.5 24-Jul-2015 14:56:16
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -190,9 +190,7 @@ function btnSagFree_Callback(hObject, eventdata, handles)
     end
     sub=num2str(subject);
     plane='sagittalFree';
-    [slice]=bbox_freesurfer(sub,handles,plane);
-    
-    set(handles.txtSlice,'String',slice)
+    bbox_freesurfer(sub,handles,plane)
 
 % --- Executes on button press in btnCoronalFree.
 function btnCoronalFree_Callback(hObject, eventdata, handles)
@@ -236,6 +234,7 @@ subject=get(handles.selectSubj,'Value');
            case  5
              subject=20;
     end
+
 showSlide(subject,handles,int32(get(handles.sldSlice,'value')))
 
 
@@ -267,3 +266,81 @@ function togglebutton3_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of togglebutton3
+
+
+% --- If Enable == 'on', executes on mouse press in 5 pixel border.
+% --- Otherwise, executes on mouse press in 5 pixel border or over sldSlice.
+function sldSlice_ButtonDownFcn(hObject, eventdata, handles)
+% hObject    handle to sldSlice (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in pushbutton8.
+function pushbutton8_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton8 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+[filename, pathname] = uigetfile('*.nii*','Select nifti file')
+
+function txtFaFilter_Callback(hObject, eventdata, handles)
+% hObject    handle to txtFaFilter (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of txtFaFilter as text
+%        str2double(get(hObject,'String')) returns contents of txtFaFilter as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function txtFaFilter_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to txtFaFilter (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in btnRun.
+function btnRun_Callback(hObject, eventdata, handles)
+% hObject    handle to btnRun (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+slideString = get(handles.selectSubj,'String')
+slideValue = get(handles.selectSubj,'Value')
+
+
+
+function txtMinArea_Callback(hObject, eventdata, handles)
+% hObject    handle to txtMinArea (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of txtMinArea as text
+%        str2double(get(hObject,'String')) returns contents of txtMinArea as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function txtMinArea_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to txtMinArea (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pushbutton10.
+function pushbutton10_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton10 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)

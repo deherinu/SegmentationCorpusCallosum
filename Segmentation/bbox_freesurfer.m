@@ -8,7 +8,7 @@ function []=bbox_freesurfer(subject,handles,plane)
     %path='D:/MEGA/Maestria/CC/Subjects/';
     path='Subjects/';
     name_image_Free='/CCSeg_freesurfer.nii.gz';
-    name_stats_bbox=strcat('/ccstats_bbox_fs_',plane,'_',sub,'.xls');
+    name_stats_bbox=strcat('/ccstats_bbox_fs_',plane,'_',sub,'.csv');
     path_stats=strcat(path,sub,name_stats_bbox);
     stats_bbox=[];
 
@@ -32,16 +32,10 @@ function []=bbox_freesurfer(subject,handles,plane)
     nii = load_nii(strcat(path,sub,name_image_Free));
 
     %Recorrer todos los slices de un corte sagital
-    for i=1:256
+    for i=70:180
 
-        %Guardar cada corte en una matriz de nxn dependiendo del corte
-        if strcmp(plane,'sagittal')
-            img = squeeze(double(nii.img(i,:,:,1)));
-        elseif strcmp(plane,'coronal')
-            img = squeeze(double(nii.img(:,i,:,1)));
-        else
-            img = squeeze(double(nii.img(:,:,i,1)));
-        end
+        %Guardar cada corte en una matriz de nxn
+        img = squeeze(double(nii.img(i,:,:,1)));
         img=rot90(img);
         
         %Operacion and entre la mascara y la imagen
@@ -55,6 +49,9 @@ function []=bbox_freesurfer(subject,handles,plane)
         imshow(corte), title(['Segmentación capa: ',num2str(i)]);
         hold on
         
+        set(handles.txtSlice,'String',i)
+        set(handles.sldSlice,'value',i)
+        
         %Dibujamos el rectangulo de cada objeto encontrado en el frame
         for k = 1 : length(ccbox)
              thisBB = ccbox(k).BoundingBox;
@@ -64,4 +61,4 @@ function []=bbox_freesurfer(subject,handles,plane)
     end
     
     %Guardamos los resultados en un archivo de excel
-    xlswrite(path_stats,stats_bbox);
+    csvwrite(path_stats,stats_bbox);

@@ -12,7 +12,7 @@ function [slice]=bbox_radiologos_Ax(subject,handles,plane)
     else
         name_image='/CCSeg_freesurfer.nii.gz';
     end
-    name_stats_bbox=strcat('/ccstats_bbox_',plane,'_',sub,'.xls');
+    name_stats_bbox=strcat('/ccstats_bbox_',plane,'_',sub,'.csv');
     path_stats=strcat(path,sub,name_stats_bbox);
     stats_bbox=[];
 
@@ -65,4 +65,4 @@ function [slice]=bbox_radiologos_Ax(subject,handles,plane)
     end
     
     %Guardamos los resultados en un archivo de excel
-    xlswrite(path_stats,stats_bbox);
+    csvwrite(path_stats,stats_bbox);
