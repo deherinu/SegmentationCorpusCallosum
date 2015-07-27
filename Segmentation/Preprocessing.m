@@ -22,7 +22,7 @@ function varargout = Preprocessing(varargin)
 
 % Edit the above text to modify the response to help Preprocessing
 
-% Last Modified by GUIDE v2.5 24-Jul-2015 18:34:28
+% Last Modified by GUIDE v2.5 27-Jul-2015 14:19:49
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -134,22 +134,11 @@ function btnSagittalRad_Callback(hObject, eventdata, handles)
 
     global mascara
 
-    subject=get(handles.selectSubj,'Value');
-    switch subject
-           case 1
-             subject=11;
-           case 2
-             subject=12;
-           case 3
-             subject=13;
-           case 4
-             subject=14;
-           case  5
-             subject=20;
-    end
+    contents = get(handles.selectSubj,'String'); 
+    subject = str2double(contents{get(handles.selectSubj,'Value')});
+    
     sub=num2str(subject);
-    plane='sagittalRad';
-       
+           
     bbox_radiologos_Sag(sub,handles,plane,mascara);
 
 % --- Executes on selection change in selectSubj.
@@ -181,19 +170,9 @@ function btnCoronalRad_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     
-    subject=get(handles.selectSubj,'Value');
-    switch subject
-           case 1
-             subject=11;
-           case 2
-             subject=12;
-           case 3
-             subject=13;
-           case 4
-             subject=14;
-           case  5
-             subject=20;
-    end
+    contents = get(handles.selectSubj,'String'); 
+    subject = str2double(contents{get(handles.selectSubj,'Value')});
+    
     sub=num2str(subject);
     plane='coronalRad';
     bbox_radiologos_Cor(sub,handles,plane)
@@ -204,19 +183,8 @@ function btnAxialRad_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-    subject=get(handles.selectSubj,'Value')
-    switch subject
-           case 1
-             subject=11;
-           case 2
-             subject=12;
-           case 3
-             subject=13;
-           case 4
-             subject=14;
-           case  5
-             subject=20;
-    end
+    contents = get(handles.selectSubj,'String'); 
+    subject = str2double(contents{get(handles.selectSubj,'Value')});
     sub=num2str(subject);
 
     plane='axialRad';
@@ -365,10 +333,23 @@ function btnRun_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-slideString = get(handles.selectSubj,'String')
-slideValue = get(handles.selectSubj,'Value')
+    global mascara
 
+    contents = get(handles.selectSubj,'String'); 
+    
+    subject = str2double(contents{get(handles.selectSubj,'Value')});
 
+    sub=num2str(subject);
+
+    plane_selected = get(get(handles.selectPlane,'SelectedObject'),'Tag');
+    
+    if strcmp(plane_selected,'radSag')
+        bbox_radiologos_Sag(sub,handles,plane_selected,mascara);
+    elseif strcmp(plane_selected,'radAx')
+        bbox_radiologos_Ax(sub,handles,plane_selected,mascara);
+    else
+        bbox_radiologos_Cor(sub,handles,plane_selected,mascara);
+    end
 
 function txtMinArea_Callback(hObject, eventdata, handles)
 % hObject    handle to txtMinArea (see GCBO)
@@ -392,12 +373,26 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on button press in pushbutton10.
-function pushbutton10_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton10 (see GCBO)
+% --- Executes on button press in btn_post.
+function btn_post_Callback(hObject, eventdata, handles)
+% hObject    handle to btn_post (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+subject=get(handles.selectSubj,'Value');
+    switch subject
+           case 1
+             subject=11;
+           case 2
+             subject=12;
+           case 3
+             subject=13;
+           case 4
+             subject=14;
+           case  5
+             subject=20;
+    end
+postprocessing(subject, handles)
 
 % --- Executes on slider movement.
 function sldRectx1_Callback(hObject, eventdata, handles)
@@ -563,3 +558,53 @@ function btnDisplay_Callback(hObject, eventdata, handles)
 
 display_img(handles)
 draw_mask(handles)
+
+
+% --- Executes on selection change in popConnect.
+function popConnect_Callback(hObject, eventdata, handles)
+% hObject    handle to popConnect (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popConnect contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popConnect
+
+
+% --- Executes during object creation, after setting all properties.
+function popConnect_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popConnect (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in radSag.
+function radSag_Callback(hObject, eventdata, handles)
+% hObject    handle to radSag (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of radSag
+
+
+% --- Executes on button press in radCor.
+function radCor_Callback(hObject, eventdata, handles)
+% hObject    handle to radCor (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of radCor
+
+
+% --- Executes on button press in radAx.
+function radAx_Callback(hObject, eventdata, handles)
+% hObject    handle to radAx (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of radAx
