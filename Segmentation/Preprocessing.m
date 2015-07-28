@@ -379,20 +379,10 @@ function btn_post_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-subject=get(handles.selectSubj,'Value');
-    switch subject
-           case 1
-             subject=11;
-           case 2
-             subject=12;
-           case 3
-             subject=13;
-           case 4
-             subject=14;
-           case  5
-             subject=20;
-    end
-postprocessing(subject, handles)
+    contents = get(handles.selectSubj,'String'); 
+    subject = str2double(contents{get(handles.selectSubj,'Value')});
+    sub=num2str(subject);
+    postprocessing(sub, handles)
 
 % --- Executes on slider movement.
 function sldRectx1_Callback(hObject, eventdata, handles)
@@ -556,7 +546,10 @@ function btnDisplay_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-display_img(handles)
+contents = get(handles.selectSubj,'String'); 
+subject = str2double(contents{get(handles.selectSubj,'Value')});
+sub=num2str(subject);
+display_img(sub,handles)
 draw_mask(handles)
 
 

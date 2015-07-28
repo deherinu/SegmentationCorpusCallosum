@@ -10,7 +10,7 @@ function []=bbox_radiologos_Sag(subject,handles,plane,mascara)
     fa_image='/fa_mri.nii.gz';
     freeSurfer_image='/CCSeg_freesurfer.nii.gz';
     name_t1_image='/T1.nii.gz';
-    pre_processing = '/cc_processed.nii.gz';
+    pre_processing = '/cc_processed_Sag.nii.gz';
     name_stats_bbox=strcat('/ccstats_bbox_',plane,'_',sub,'.csv');
     path_stats=strcat(path,sub,name_stats_bbox);
     fa_image_name=strcat(path,sub,fa_image);
@@ -30,7 +30,7 @@ function []=bbox_radiologos_Sag(subject,handles,plane,mascara)
     imshow(mascara);
 
     %Lectura imagen nifti
-    image_nii = load_nii(fa_image_name);
+    fa_nii = load_nii(fa_image_name);
     T1_nii = load_nii(T1_image_name);
     freesurfer_nii = load_nii(freeSurfer_image_name);
 
@@ -42,7 +42,7 @@ function []=bbox_radiologos_Sag(subject,handles,plane,mascara)
         T1_img=rot90(T1_img);
         
         %Guardar cada corte en una matriz de nxn dependiendo del corte, FA
-        fa_data = squeeze((image_nii.img(i,:,:,1)));
+        fa_data = squeeze((fa_nii.img(i,:,:,1)));
         fa_data=rot90(fa_data);
         
         %Guardar cada corte en una matriz de nxn dependiendo del corte, FS
@@ -85,10 +85,12 @@ function []=bbox_radiologos_Sag(subject,handles,plane,mascara)
             rectangle('Position', [maskBB(1),maskBB(2),maskBB(3),maskBB(4)],'EdgeColor','b','LineWidth',2 );
         end
         
-        image_nii.img(i,:,:,1) = corte;
+        fa_nii.img(i,:,:,1) = corte;
         
     end
     
-    save_nii(image_nii,strcat(path,sub,pre_processing));
+    save_nii(fa_nii,strcat(path,sub,pre_processing));
     %Guardamos los resultados en un archivo de excel
     csvwrite(path_stats,stats_bbox);
+    %Alert
+    msgbox('Processing completed','Completed');

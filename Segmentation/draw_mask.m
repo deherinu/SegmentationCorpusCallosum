@@ -1,5 +1,6 @@
 function [] = draw_mask(handles)
 
+    global mascara
     global rectx1
     global rectx2
     global recty1
@@ -16,6 +17,8 @@ function [] = draw_mask(handles)
     cirx = get(handles.sldCirx,'Value');
     ciry = get(handles.sldCiry,'Value');
     cirR = get(handles.sldCirR,'Value');
+    
+    set(handles.sldRectx1,'TooltipString',num2str(rectx1)); 
     
     %Mascara
     for i=1:256
