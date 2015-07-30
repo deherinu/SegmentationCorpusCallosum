@@ -58,19 +58,21 @@ function [] = postprocessing(subject, handles)
         
         %Filling holes
         msgFill = msgbox('Filling holes..');
-                
-        filled_image=zeros(256,256,256);
         
-        for i=1:size(bw3,3)
-            se = strel('disk',11);
-            eroded = imerode(bw3(:,:,i),se)
-            filled_image(:,:,i)=eroded;
-        end
+        %se = ones(10,10,10);
+        se=strel3d(15);
         
+        %filled_image = imclose(bw3,se);
+        step1 = imdilate(bw3,se);
+        step2 = imdilate(step1,se);
+        step3 = imerode(step2,se);
+        filled_image = imerode(step3,se);
+        
+        %Dilato y erosioso
         whos filled_image
         
         %Copy result
-        sag_nii.img(:,:,:,:) = bw3;
+        sag_nii.img(:,:,:,:) = filled_image;
 
         %Save nifti image
         save_nii(sag_nii,strcat(path,subject,post_processing_img));

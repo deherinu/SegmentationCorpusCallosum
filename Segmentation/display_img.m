@@ -1,7 +1,7 @@
 function [] = display_img(subject,handles)
 
     path='Subjects/';
-    name_t1_image='/T1.nii.gz';
+    name_t1_image='/fa_mri.nii.gz';
     image_nii = load_nii(strcat(path,subject,name_t1_image));
     capa = 100;
     
